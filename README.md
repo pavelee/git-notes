@@ -1,2 +1,5 @@
-# git_notes
-My personal notes about git
+# Notatki na temat git
+
+## Git Rebase
+
+### Uproszczenie gałęzi repozytorium
