@@ -67,6 +67,8 @@ git log --graph
 * commit 5416a0fc30daa6d6274fe3134cc3e0c93ea796f7
   Author: test <test@test.com>
   Date:   Sat Mar 19 23:23:21 2022 +0100
+  
+      my feature1
 ```
 
 Aby wyprostować historie wykonajmy rebase
