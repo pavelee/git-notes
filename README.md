@@ -31,7 +31,11 @@ Możemy "wyprostować" historie git'a poprzez wykonanie rebase po zmergowaniu zm
 
 ### Uproszczenie gałęzi repozytorium
 
+Wykonaj poniższe polecenia aby zasymulować sytuacje kiedy powstają zmiany podczas naszej pracy na innym branchu.
+
 ```
+mkdir myrepo && cd myrepo
+git init
 echo 'my changes' > feature1 && git add feature1 && git commit -m "my feature1"
 git checkout -b feature2
 echo 'my changes' > feature2 && git add feature2 && git commit -m "my feature2"
