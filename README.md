@@ -31,8 +31,6 @@ Możemy "wyprostować" historie git'a poprzez wykonanie rebase po zmergowaniu zm
 
 ### Uproszczenie gałęzi repozytorium
 
-
-
 ```
 echo 'my changes' > feature1 && git add feature1 && git commit -m "my feature1"
 git checkout -b feature2
@@ -77,7 +75,28 @@ Aby wyprostować historie wykonajmy rebase
 git rebase master
 ```
 
+Poniżej widać poprawę czytelności historii zmian po wykonaniu rebase.
 
+```
+git log --graph
+* commit 12a9b3a59045631ff01bdf6c6803b077091dce06 (HEAD -> feature2)
+| Author: test <test@test.com>
+| Date:   Sat Mar 19 23:24:21 2022 +0100
+| 
+|     my feature2
+| 
+* commit 93fb3a217bd353aba982ec2ef8d2be4262af8723 (master)
+| Author: test <test@test.com>
+| Date:   Sat Mar 19 23:25:12 2022 +0100
+| 
+|     my feature3
+| 
+* commit 5416a0fc30daa6d6274fe3134cc3e0c93ea796f7
+  Author: test <test@test.com>
+  Date:   Sat Mar 19 23:23:21 2022 +0100
+  
+      my feature1
+```
 
 ### Łaczenie commitów
 
