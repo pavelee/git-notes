@@ -350,3 +350,15 @@ my feature2 change 2
 ```
 
 Finalnie mamy jednego commita i schludną historie zmian.
+
+### Skrajny przypadek - wykonywanie rebase po wypchnięciu zmian na gałęź
+
+Wykonywanie rebase jest bezpieczne zanim jeszcze wypchniemy zmiany na gałąź po stronie serwera. Próba wykonywnia rebase po wypchnięciu zmian spowoduje sparaliżowanie naszej pracy. Chcąć wypchnać zmiany dostaniemy komunikat o potrzebie wykonania pull z serwera, natomiast operacja pull nie powiedzie się ponieważ zmodyfikowaliśmy swoje drzewo zmian.
+
+Jeśli zdarzy nam się przypadek że wykonamy rebase po wypchnięciu zmian na zdalną gałąź to zostaje nam tylko próba wykonania push z opcja --force. Jest to ostatczeność i wymuszan a gicie nadpisanie historii.
+
+```
+git push --force
+```
+
+Należy powyższej komendy używać z rozwagą.
