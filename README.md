@@ -199,4 +199,49 @@ Założmy że nasz współpracownik poprosił nas abyśmy troche upodządkowali 
 
 #### Pierwsze podejście - wykonanie git reset i ponowny commit
 
-Pierwsze podejście jest bardzo proste. Resetujemy nasze commity do tego co znajduję się na masterze. Następnie zmiany które nam wpadły 
+Pierwsze podejście jest bardzo proste. Resetujemy nasze commity do tego co znajduję się na masterze. Następnie zmiany które nam wpadły commitujemy.
+
+Istotne jest znalezienie identyfikatora commita który jest najnowszy na gałęzi master, możemy to rozpoznać po wskaźniku obok identyfikatora (master). W tym przypadku interesuje nas
+
+```
+* commit 8e045bf89b0cd7c29d2083b7c92f2d7df7b44e4c (master)
+| Author: test <test@test.com>
+| Date:   Sun Mar 20 15:03:16 2022 +0100
+| 
+|     my feature3
+| 
+```
+
+Mając już indentyfikator resetujemy do tego commita nasze repozytorium
+
+```
+git reset 8e045bf89b0cd7c29d2083b7c92f2d7df7b44e4c
+```
+
+W tym momencie możemy wykonać commita i zweryfikować że nasza historia wygląda znacznie schludniej
+
+```
+git add . && git commit -m "my feature"
+git log --graph
+* commit 62182374b6460a36e8453b86e1ac552b22b81503 (HEAD -> feature2)
+| Author: test <test@test.com>
+| Date:   Sun Mar 20 16:38:55 2022 +0100
+| 
+|     my feature
+| 
+* commit 6e152b05d8d67a55769a42cf68888cad938d0efc (master)
+| Author: test <test@test.com>
+| Date:   Sun Mar 20 16:37:33 2022 +0100
+| 
+|     my feature3
+| 
+* commit 881b434a6ce6d70814e6f3df06e8f18f1563b642
+  Author: test <test@test.com>
+  Date:   Sun Mar 20 16:37:33 2022 +0100
+  
+      my feature1
+```
+
+#### Drugie podejście - git rebase w trybie interactive
+
+
