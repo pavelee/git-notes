@@ -201,21 +201,10 @@ Założmy że nasz współpracownik poprosił nas abyśmy troche upodządkowali 
 
 Pierwsze podejście jest bardzo proste. Resetujemy nasze commity do tego co znajduję się na masterze. Następnie zmiany które nam wpadły commitujemy.
 
-Istotne jest znalezienie identyfikatora commita który jest najnowszy na gałęzi master, możemy to rozpoznać po wskaźniku obok identyfikatora (master). W tym przypadku interesuje nas
+Resetujemy stan do mastera
 
 ```
-* commit 8e045bf89b0cd7c29d2083b7c92f2d7df7b44e4c (master)
-| Author: test <test@test.com>
-| Date:   Sun Mar 20 15:03:16 2022 +0100
-| 
-|     my feature3
-| 
-```
-
-Mając już indentyfikator resetujemy do tego commita nasze repozytorium
-
-```
-git reset 8e045bf89b0cd7c29d2083b7c92f2d7df7b44e4c
+git reset master
 ```
 
 W tym momencie możemy wykonać commita i zweryfikować że nasza historia wygląda znacznie schludniej
@@ -244,4 +233,120 @@ git log --graph
 
 #### Drugie podejście - git rebase w trybie interactive
 
+Drugie podejście polega na wykorzystaniu inteaktywnego rebase, co pozwala nam wskazać aby połączyć commity
 
+Rozpoczynamy od uruchomienia interaktywnego trybu rebase
+
+```
+git rebase -i master
+```
+
+Ukazuje nam się poniższy widok
+
+```
+pick a9c8fa6 my feature2
+pick 0f391d1 my feature2 change 1
+pick 4aed29e my feature2 change 2
+
+# Rebase fcd014e..d0975c2 onto fcd014e (3 commands)
+#
+# Commands:
+# p, pick <commit> = use commit
+# r, reword <commit> = use commit, but edit the commit message
+# e, edit <commit> = use commit, but stop for amending
+# s, squash <commit> = use commit, but meld into previous commit
+# f, fixup [-C | -c] <commit> = like "squash" but keep only the previous
+#                    commit's log message, unless -C is used, in which case
+#                    keep only this commit's message; -c is same as -C but
+#                    opens the editor
+# x, exec <command> = run command (the rest of the line) using shell
+# b, break = stop here (continue rebase later with 'git rebase --continue')
+# d, drop <commit> = remove commit
+# l, label <label> = label current HEAD with a name
+# t, reset <label> = reset HEAD to a label
+# m, merge [-C <commit> | -c <commit>] <label> [# <oneline>]
+# .       create a merge commit using the original merge commit's
+# .       message (or the oneline, if no original merge commit was
+# .       specified); use -c <commit> to reword the commit message
+#
+# These lines can be re-ordered; they are executed from top to bottom.
+#
+# If you remove a line here THAT COMMIT WILL BE LOST.
+#
+# However, if you remove everything, the rebase will be aborted.
+#
+```
+
+To co musimy zrobić to wskazać że chcemy wykonać squash dla wszystkich commitów starszych od pierwszego który jest ponad masterem. Logika tutaj wskazuje gitowi że chcemy do tego commita załaczyć wszystkie pozostałe.
+
+W tym przypadku zmieniamy pick na s (skrót od squash) dla wszysktkich commitów oprócz pierwszego ponad masterem. Tak jak poniżej
+
+```
+pick a9c8fa6 my feature2
+s 0f391d1 my feature2 change 1
+s 4aed29e my feature2 change 2
+
+# Rebase fcd014e..d0975c2 onto fcd014e (3 commands)
+#
+# Commands:
+# p, pick <commit> = use commit
+# r, reword <commit> = use commit, but edit the commit message
+# e, edit <commit> = use commit, but stop for amending
+# s, squash <commit> = use commit, but meld into previous commit
+# f, fixup [-C | -c] <commit> = like "squash" but keep only the previous
+#                    commit's log message, unless -C is used, in which case
+#                    keep only this commit's message; -c is same as -C but
+#                    opens the editor
+# x, exec <command> = run command (the rest of the line) using shell
+# b, break = stop here (continue rebase later with 'git rebase --continue')
+# d, drop <commit> = remove commit
+# l, label <label> = label current HEAD with a name
+# t, reset <label> = reset HEAD to a label
+# m, merge [-C <commit> | -c <commit>] <label> [# <oneline>]
+# .       create a merge commit using the original merge commit's
+# .       message (or the oneline, if no original merge commit was
+# .       specified); use -c <commit> to reword the commit message
+#
+# These lines can be re-ordered; they are executed from top to bottom.
+#
+# If you remove a line here THAT COMMIT WILL BE LOST.
+#
+# However, if you remove everything, the rebase will be aborted.
+#
+```
+
+Zapisujemy wynik, jest to przekazywane do silinka gita
+
+Następnie zobaczymy widok który prosi nas o wiadomość dla commita. Domyślnie jest to połaczenie wiadomości dla łączonych commitów. Możemy to zmodyfikować pod własne potrzeby.
+
+```
+# This is a combination of 3 commits.
+# This is the 1st commit message:
+
+my feature2
+
+# This is the commit message #2:
+
+my feature2 change 1
+
+# This is the commit message #3:
+
+my feature2 change 2
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# Date:      Sun Mar 20 17:34:18 2022 +0100
+#
+# interactive rebase in progress; onto fcd014e
+# Last commands done (3 commands done):
+#    squash 0f391d1 my feature2 change 1
+#    squash 4aed29e my feature2 change 2
+# No commands remaining.
+# You are currently rebasing branch 'feature2' on 'fcd014e'.
+#
+# Changes to be committed:
+#       new file:   feature2
+```
+
+Finalnie mamy jednego commita i schludną historie zmian.
