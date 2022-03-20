@@ -34,20 +34,13 @@ Możemy "wyprostować" historie git'a poprzez wykonanie rebase po zmergowaniu zm
 Wykonaj poniższe polecenia aby zasymulować sytuacje kiedy powstają zmiany podczas naszej pracy na innym branchu.
 
 ```
-mkdir myrepo && cd myrepo
-git init
-echo 'my changes' > feature1 && git add feature1 && git commit -m "my feature1"
-git checkout -b feature2
-echo 'my changes' > feature2 && git add feature2 && git commit -m "my feature2"
-git switch master
-echo 'my changes' > feature3 && git add feature3 && git commit -m "my feature3"
-git switch feature2
-git merge master # wykonujemy merge metoda rekursywną
+chmod +x recursive_merge_booster1.sh && ./recursive_merge_booster1.sh
 ```
 
 Następnie zobaczmy jak wygląda drzewo po wykonaniu merga. Tak jak poniżej widać mamy wykonaną odnogę, która zaburza czytelność historii zmian.
 
 ```
+cd recursive_merge_booster_example1
 git log --graph
 *   commit 7c0ea2babcea93cbf3ad5f4365c95f309d784b28 (HEAD -> feature2)
 |\  Merge: 47927a4 93fb3a2
@@ -84,6 +77,7 @@ git rebase master
 Poniżej widać poprawę czytelności historii zmian po wykonaniu rebase.
 
 ```
+cd recursive_merge_booster_example1
 git log --graph
 * commit 12a9b3a59045631ff01bdf6c6803b077091dce06 (HEAD -> feature2)
 | Author: test <test@test.com>
@@ -106,4 +100,103 @@ git log --graph
 
 ### Łaczenie commitów
 
+W momencie kiedy podczas pracy wykonujemy commity może zajeść sytuacja że chielibyśmy uporządkować naszą historie i wszystkie zmiany złączyć do jednego commita.
 
+W pierwszej kolejności zasymulujmy przypadek takiej sytuacji
+
+```
+chmod +x recursive_merge_booster2.sh && ./recursive_merge_booster2.sh
+```
+
+Następnie zobaczmy jak wygląda drzewo
+
+```
+cd recursive_merge_booster_example2
+git log --graph
+*   commit 5dc3b6c058ae2c2eaee289feb43439a1c6fc5a19 (HEAD -> feature2)
+|\  Merge: 1e772ad 8e045bf
+| | Author: test <test@test.com>
+| | Date:   Sun Mar 20 15:03:16 2022 +0100
+| | 
+| |     merge master
+| | 
+| * commit 8e045bf89b0cd7c29d2083b7c92f2d7df7b44e4c (master)
+| | Author: test <test@test.com>
+| | Date:   Sun Mar 20 15:03:16 2022 +0100
+| | 
+| |     my feature3
+| | 
+* | commit 1e772adfd9c458076891529605407259d157825e
+| | Author: test <test@test.com>
+| | Date:   Sun Mar 20 15:03:16 2022 +0100
+| | 
+| |     my feature2 change 2
+| | 
+* | commit 6bbc5c6d6db73b83c94dd1d57f8fc25183c5f2cb
+| | Author: test <test@test.com>
+| | Date:   Sun Mar 20 15:03:16 2022 +0100
+| | 
+| |     my feature2 change 1
+| | 
+* | commit 8882da704171a990e627bdac0157d6ffd766e59f
+|/  Author: test <test@test.com>
+|   Date:   Sun Mar 20 15:03:16 2022 +0100
+|   
+|       my feature2
+| 
+* commit bfaf512bbd24c9fb315800a7e4d3723843b07b6e
+  Author: test <test@test.com>
+  Date:   Sun Mar 20 15:03:16 2022 +0100
+  
+      my feature1
+```
+
+Analogicznie do poprzedniego przykładu, wyprostujmy drzewo i wykonajmy rebase
+
+```
+git rebase master
+```
+
+Sprawdźmy wynik w postaci drzewa po wykonaniu rebase
+
+```
+cd recursive_merge_booster_example2
+git log --graph
+* commit c4a7ba184686bebc097d27928a137bdb4bdf9676 (HEAD -> feature2)
+| Author: test <test@test.com>
+| Date:   Sun Mar 20 15:03:16 2022 +0100
+| 
+|     my feature2 change 2
+| 
+* commit 00cc4b8a1eb348fb2135fa5364d473750ab75b01
+| Author: test <test@test.com>
+| Date:   Sun Mar 20 15:03:16 2022 +0100
+| 
+|     my feature2 change 1
+| 
+* commit 11d71c79bfba10e90cf0cbaaaab8bc03006ad561
+| Author: test <test@test.com>
+| Date:   Sun Mar 20 15:03:16 2022 +0100
+| 
+|     my feature2
+| 
+* commit 8e045bf89b0cd7c29d2083b7c92f2d7df7b44e4c (master)
+| Author: test <test@test.com>
+| Date:   Sun Mar 20 15:03:16 2022 +0100
+| 
+|     my feature3
+| 
+* commit bfaf512bbd24c9fb315800a7e4d3723843b07b6e
+  Author: test <test@test.com>
+  Date:   Sun Mar 20 15:03:16 2022 +0100
+  
+      my feature1
+```
+
+Tak jak widać na powyższym listingu jesteśmy trzy commity ponad gałęzią master.
+
+Założmy że nasz współpracownik poprosił nas abyśmy troche upodządkowali nasze zmiany i złaczyli w jednego commita
+
+#### Pierwsze podejście - wykonanie git reset i ponowny commit
+
+Pierwsze podejście jest bardzo proste. Resetujemy nasze commity do tego co znajduję się na masterze. Następnie zmiany które nam wpadły 
