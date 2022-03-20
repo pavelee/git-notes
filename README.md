@@ -351,6 +351,32 @@ my feature2 change 2
 
 Finalnie mamy jednego commita i schludną historie zmian.
 
+```
+cd recursive_merge_booster_example2
+git log --graph
+* commit 1776080731c0254f1e222d16c585a028bb72ac8f (HEAD -> feature2)
+| Author: test <test@test.com>
+| Date:   Sun Mar 20 17:34:18 2022 +0100
+| 
+|     my feature2
+|     
+|     my feature2 change 1
+|     
+|     my feature2 change 2
+| 
+* commit fcd014e455ba038f4cb0ec54ca4efafef74490f8 (master)
+| Author: test <test@test.com>
+| Date:   Sun Mar 20 17:34:18 2022 +0100
+| 
+|     my feature3
+| 
+* commit 3f0aa44ecad2b4c7b478635ae4cdfe4b295095dd
+  Author: test <test@test.com>
+  Date:   Sun Mar 20 17:34:18 2022 +0100
+  
+      my feature1
+```
+
 ### Skrajny przypadek - wykonywanie rebase po wypchnięciu zmian na gałęź
 
 Wykonywanie rebase jest bezpieczne zanim jeszcze wypchniemy zmiany na gałąź po stronie serwera. Próba wykonywnia rebase po wypchnięciu zmian spowoduje sparaliżowanie naszej pracy. Chcąć wypchnać zmiany dostaniemy komunikat o potrzebie wykonania pull z serwera, natomiast operacja pull nie powiedzie się ponieważ zmodyfikowaliśmy swoje drzewo zmian.
