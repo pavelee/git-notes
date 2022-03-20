@@ -377,7 +377,7 @@ git log --graph
       my feature1
 ```
 
-### Skrajny przypadek - wykonywanie rebase po wypchnięciu zmian na gałęź
+### Skrajny przypadek - wykonywanie rebase po wypchnięciu zmian na zdalną gałęź
 
 Wykonywanie rebase jest bezpieczne zanim jeszcze wypchniemy zmiany na gałąź po stronie serwera. Próba wykonywnia rebase po wypchnięciu zmian spowoduje sparaliżowanie naszej pracy. Chcąć wypchnać zmiany dostaniemy komunikat o potrzebie wykonania pull z serwera, natomiast operacja pull nie powiedzie się ponieważ zmodyfikowaliśmy swoje drzewo zmian.
 
